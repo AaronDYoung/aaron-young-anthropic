@@ -104,6 +104,11 @@ h3 { font-family: var(--sans); font-size: 18px; font-weight: 600; letter-spacing
 .poster.loading .play { animation: pulse 1.2s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity: .45; transform: scale(.94); } }
 .screen iframe { transition: opacity .35s ease; }
+.pfs-btn { position: absolute; top: 10px; right: 10px; z-index: 3; width: 38px; height: 38px; display: grid; place-items: center; border: 0; border-radius: 10px; background: rgba(14, 14, 13, 0.62); color: #fff; cursor: pointer; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.pfs-btn svg { width: 18px; height: 18px; }
+.screen.pfs { position: fixed; z-index: 1000; left: 0; top: 0; margin: 0; max-width: none; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
+html.pfs-lock, html.pfs-lock body { overflow: hidden; height: 100%; }
+html.pfs-lock .film, html.pfs-lock .hero > * { animation: none !important; transform: none !important; }
 .poster:hover .play, .poster:focus-visible .play { transform: scale(1.06); }
 .poster img { position: absolute; top: clamp(18px, 4vw, 44px); left: clamp(18px, 4vw, 44px); width: clamp(54px, 9vw, 112px); aspect-ratio: 1; border-radius: 50%; object-fit: cover; object-position: 50% 22%; }
 .chap { display: grid; gap: 18px; padding-top: 10px; }
@@ -370,6 +375,7 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); display: f
 
   <div class="film" id="film">
     <div class="screen" id="screen">
+      <button class="pfs-btn" id="pfsBtn" type="button" aria-label="Full screen" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
       <button class="poster" id="poster" type="button" aria-label="Play the film">
         <img src="headshot.jpg" alt="">
         <div class="pt">
@@ -533,7 +539,7 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); display: f
           (function settle() {
             if (w.__filmJump) {
               w.__filmJump('Intro');
-              setTimeout(function () { frame.style.opacity = '1'; poster.hidden = true; resolve(doc); }, 250);
+              setTimeout(function () { frame.style.opacity = '1'; poster.hidden = true; if (!nativeFs) pfsBtn.hidden = false; resolve(doc); }, 250);
               return;
             }
             if ((waited += 100) > 4000) { frame.style.opacity = '1'; poster.hidden = true; return resolve(doc); }
@@ -547,6 +553,31 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); display: f
     });
     return ready;
   }
+
+  // Phones without the Fullscreen API (iPhone Safari): fill the screen with the film instead.
+  // It follows the phone's own orientation, so turning the phone gives the landscape view.
+  var pfsBtn = document.getElementById('pfsBtn');
+  var pfsOn = false;
+  var nativeFs = !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+  function pfsLayout() {
+    if (!pfsOn) return;
+    screen.style.width = window.innerWidth + 'px';
+    screen.style.height = window.innerHeight + 'px';
+  }
+  function pfsSet(on) {
+    pfsOn = on;
+    screen.classList.toggle('pfs', on);
+    document.documentElement.classList.toggle('pfs-lock', on);
+    pfsBtn.setAttribute('aria-label', on ? 'Exit full screen' : 'Full screen');
+    if (on) { pfsLayout(); } else { screen.style.width = screen.style.height = ''; }
+    // Tell the film, so its playback bar floats and tucks away like a video player's.
+    try { frame.contentDocument.documentElement.classList.toggle('film-full', on); } catch (e) {}
+  }
+  window.__pfs = pfsSet;
+  pfsBtn.addEventListener('click', function () { pfsSet(!pfsOn); });
+  window.addEventListener('resize', pfsLayout);
+  window.addEventListener('orientationchange', function () { setTimeout(pfsLayout, 250); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && pfsOn) pfsSet(false); });
 
   var chapters = document.getElementById('chapters');
   var strip = document.getElementById('strip');
