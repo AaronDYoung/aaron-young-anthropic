@@ -535,12 +535,12 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); display: f
 
   // Phones get the film as a real video file, so the native player gives true full screen,
   // rotation and scrubbing. Laptops keep the live film.
-  var phone = false && (function () { try { return matchMedia('(pointer: coarse)').matches && Math.min(window.screen.width, window.screen.height) <= 820; } catch (e) { return false; } })();
+  var phone = (function () { try { return matchMedia('(pointer: coarse)').matches && Math.min(window.screen.width, window.screen.height) <= 820; } catch (e) { return false; } })();
   var video = null;
   function loadVideo() {
     if (ready) return ready;
     video = document.createElement('video');
-    video.src = 'film-mobile.mp4?v=0';
+    video.src = 'film-mobile.mp4?v=55da663282';
     video.setAttribute('playsinline', '');
     video.controls = true;
     video.preload = 'auto';
