@@ -106,17 +106,48 @@ h3 { font-family: var(--sans); font-size: 18px; font-weight: 600; letter-spacing
 .screen iframe { transition: opacity .35s ease; }
 .poster:hover .play, .poster:focus-visible .play { transform: scale(1.06); }
 .poster img { position: absolute; top: clamp(18px, 4vw, 44px); left: clamp(18px, 4vw, 44px); width: clamp(54px, 9vw, 112px); aspect-ratio: 1; border-radius: 50%; object-fit: cover; object-position: 50% 22%; }
-.film-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-.film-bar button { font: 500 13px var(--mono); letter-spacing: 0.04em; text-transform: uppercase; background: none; border: 1px solid var(--line); color: var(--ink); padding: 8px 14px; border-radius: 999px; cursor: pointer; }
-.film-bar button:hover { border-color: var(--ink); }
-.chapters { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0; border-top: 1px solid var(--line); }
-.chapters button { display: grid; gap: 2px; text-align: left; padding: 12px 12px 12px 0; background: none; border: 0; border-bottom: 1px solid var(--line); color: var(--ink); font: inherit; cursor: pointer; }
-.chapters button .label { font-size: 11.5px; }
-.chapters button span:last-child { font-size: 15px; font-weight: 500; }
-.chapters button:hover span:last-child { color: var(--clay); }
-.chapters button { box-shadow: inset 0 0 0 transparent; transition: box-shadow .2s ease; }
-.chapters button.on { box-shadow: inset 0 -2px 0 var(--clay); }
-.chapters button.on span:last-child { color: var(--clay); }
+.chap { display: grid; gap: 18px; padding-top: 10px; }
+.chap-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 20px; flex-wrap: wrap; }
+.chap-head h2 { font-size: clamp(24px, 2.6vw, 30px); }
+.chap-head p { font-size: 15px; color: var(--muted); }
+.chap-head p b { color: var(--ink); font-weight: 600; }
+.strip { display: flex; gap: 3px; height: 10px; }
+.strip button { position: relative; flex: var(--d) 1 0; min-width: 4px; padding: 0; border: 0; border-radius: 3px; background: var(--line); cursor: pointer; overflow: hidden; }
+.strip button i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--clay); }
+.strip button.done i { width: 100%; background: color-mix(in srgb, var(--clay) 55%, var(--paper)); }
+.strip button:hover { background: color-mix(in srgb, var(--ink) 30%, transparent); }
+.chapters { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.chapters button { position: relative; display: grid; grid-template-rows: auto auto 1fr auto; gap: 6px; text-align: left; padding: 16px 16px 18px; min-height: 148px; background: var(--surface); border: 1px solid transparent; border-radius: 10px; color: var(--ink); font: inherit; cursor: pointer; overflow: hidden; transition: transform .2s ease, border-color .2s ease, background .2s ease; }
+.chapters button:hover { transform: translateY(-2px); border-color: var(--line); }
+.chapters .meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.05em; color: var(--muted); }
+.chapters .meta .n { color: var(--ink); }
+.chapters .t { font-family: var(--serif); font-size: 21px; line-height: 1.08; letter-spacing: -0.015em; text-wrap: balance; }
+.chapters .d { font-size: 13.5px; line-height: 1.4; color: var(--muted); text-wrap: pretty; }
+.chapters .go { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.chapters .go svg { width: 9px; height: 9px; }
+.chapters .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: transparent; }
+.chapters .bar i { display: block; height: 100%; width: 0; background: var(--clay); }
+.chapters .star { display: inline-block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; background: var(--ink); color: var(--paper); }
+.chapters button.on { background: var(--clay-soft); border-color: color-mix(in srgb, var(--clay) 40%, transparent); }
+.chapters button.on .go { color: var(--clay); }
+.chapters button.on .t { color: var(--ink); }
+.cv { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 24px; align-items: center; padding: 22px; margin-top: 8px; border: 1px solid var(--line); border-radius: 12px; }
+.cv img { width: 150px; border-radius: 4px; box-shadow: 0 12px 30px -16px rgba(20, 20, 19, 0.45), 0 0 0 1px var(--line); }
+.cv .body { display: grid; gap: 10px; min-width: 0; }
+.cv h2 { font-size: clamp(24px, 2.6vw, 30px); }
+.cv p { color: var(--muted); font-size: 15px; }
+.cv .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font: 500 13px var(--sans); padding: 10px 16px; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--ink); text-decoration: none; cursor: pointer; }
+.btn:hover { border-color: var(--ink); color: var(--ink); }
+.btn.primary { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.btn.primary:hover { color: var(--paper); opacity: .9; }
+.btn svg { width: 14px; height: 14px; }
+.toast { font-size: 13.5px; color: var(--clay); min-height: 1em; }
+.top .cvlink { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; color: var(--muted); }
+.top .cvlink:hover { color: var(--ink); }
+.top .links { display: flex; gap: 20px; }
+@media (max-width: 900px) { .chapters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .cv { grid-template-columns: minmax(0, 1fr); } .cv img { width: 120px; } .chapters button { min-height: 0; } }
 
 /* ---------- sections ---------- */
 section { padding-block: clamp(56px, 8vw, 104px); border-top: 1px solid var(--line); }
@@ -323,7 +354,7 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); display: f
 <div class="wrap">
   <header class="top">
     <span class="name">Aaron Young</span>
-    <a class="label" href="#contact" style="text-decoration:none">Contact</a>
+    <span class="links"><a class="cvlink" href="#cv">CV</a><a class="cvlink" href="#contact">Contact</a></span>
   </header>
 
   <div class="hero">
@@ -349,25 +380,117 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); display: f
         <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L7.5 3.64A1 1 0 0 0 6 4.5z"/></svg></span>
       </button>
     </div>
-    <div class="film-bar">
-      <span class="label">Short on time? Jump to a chapter</span>
-    </div>
-    <div class="chapters" id="chapters">
-      <button type="button" data-ch="Intro"><span class="label num">0:00</span><span>Intro</span></button>
-      <button type="button" data-ch="Overview"><span class="label num">0:09</span><span>Overview</span></button>
-      <button type="button" data-ch="WhyNow"><span class="label num">0:24</span><span>Why now</span></button>
-      <button type="button" data-ch="Performance"><span class="label num">0:39</span><span>Results</span></button>
-      <button type="button" data-ch="Path"><span class="label num">1:12</span><span>Career path</span></button>
-      <button type="button" data-ch="Pipeline"><span class="label num">1:33</span><span>Pipeline</span></button>
-      <button type="button" data-ch="Careem"><span class="label num">1:59</span><span>The Careem deal</span></button>
-      <button type="button" data-ch="Learning"><span class="label num">2:55</span><span>A lesson learnt</span></button>
-      <button type="button" data-ch="Territory"><span class="label num">3:13</span><span>My plan for Anthropic</span></button>
-      <button type="button" data-ch="Summary"><span class="label num">3:44</span><span>What I bring to Anthropic</span></button>
-      <button type="button" data-ch="Close"><span class="label num">3:54</span><span>Contact</span></button>
+    <div class="chap">
+      <div class="chap-head">
+        <h2>Chapters</h2>
+        <p>Short on time? <b>Start with the Careem deal and my plan for Anthropic.</b></p>
+      </div>
+      <div class="strip" id="strip" aria-label="Film timeline">
+      <button type="button" data-ch="Intro" data-s="0" data-d="9" style="--d:9" aria-label="Intro, 0:00"><i></i></button>
+      <button type="button" data-ch="Overview" data-s="9" data-d="15" style="--d:15" aria-label="Overview, 0:09"><i></i></button>
+      <button type="button" data-ch="WhyNow" data-s="24" data-d="15" style="--d:15" aria-label="Why now, 0:24"><i></i></button>
+      <button type="button" data-ch="Performance" data-s="39" data-d="33" style="--d:33" aria-label="Results, 0:39"><i></i></button>
+      <button type="button" data-ch="Path" data-s="72" data-d="21" style="--d:21" aria-label="Career path, 1:12"><i></i></button>
+      <button type="button" data-ch="Pipeline" data-s="93" data-d="26" style="--d:26" aria-label="Pipeline, 1:33"><i></i></button>
+      <button type="button" data-ch="Careem" data-s="119" data-d="56" style="--d:56" aria-label="The Careem deal, 1:59"><i></i></button>
+      <button type="button" data-ch="Learning" data-s="175" data-d="17.8" style="--d:17.8" aria-label="A lesson learnt, 2:55"><i></i></button>
+      <button type="button" data-ch="Territory" data-s="192.8" data-d="30.7" style="--d:30.7" aria-label="My plan for Anthropic, 3:12"><i></i></button>
+      <button type="button" data-ch="Summary" data-s="223.5" data-d="10" style="--d:10" aria-label="What I bring to Anthropic, 3:43"><i></i></button>
+      <button type="button" data-ch="Close" data-s="233.5" data-d="6.7" style="--d:6.7" aria-label="Close, 3:53"><i></i></button>
+      </div>
+      <div class="chapters" id="chapters">
+      <button type="button" data-ch="Intro" data-s="0" data-d="9">
+        <span class="meta"><span><span class="n">01</span> · 0:00</span><span>9s</span></span>
+        <span class="t">Intro</span>
+        <span class="d">Who I am and why I made this film.</span>
+        <span class="go"><svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M2 1v8l7-4z"/></svg><span class="st">Play chapter</span></span>
+        <span class="bar"><i></i></span>
+      </button>
+      <button type="button" data-ch="Overview" data-s="9" data-d="15">
+        <span class="meta"><span><span class="n">02</span> · 0:09</span><span>15s</span></span>
+        <span class="t">Overview</span>
+        <span class="d">$3.78M ARR closed. A UAE territory built from $0 to $9M.</span>
+        <span class="go"><svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M2 1v8l7-4z"/></svg><span class="st">Play chapter</span></span>
+        <span class="bar"><i></i></span>
+      </button>
+      <button type="button" data-ch="WhyNow" data-s="24" data-d="15">
+        <span class="meta"><span><span class="n">03</span> · 0:24</span><span>15s</span></span>
+        <span class="t">Why now</span>
+        <span class="d">Why Anthropic, and why this is the right moment.</span>
+        <span class="go"><svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M2 1v8l7-4z"/></svg><span class="st">Play chapter</span></span>
+        <span class="bar"><i></i></span>
+      </button>
+      <button type="button" data-ch="Performance" data-s="39" data-d="33">
+        <span class="meta"><span><span class="n">04</span> · 0:39</span><span>33s</span></span>
+        <span class="t">Results</span>
+        <span class="d">Attainment year by year, FY21 to today.</span>
+        <span class="go"><svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M2 1v8l7-4z"/></svg><span class="st">Play chapter</span></span>
+        <span class="bar"><i></i></span>
+      </button>
+      <button type="button" data-ch="Path" data-s="72" data-d="21">
+        <span class="meta"><span><span class="n">05</span> · 1:12</span><span>21s</span></span>
+        <span class="t">Career path</span>
+        <span class="d">London to Dubai, and why I moved each time.</span>
+        <span class="go"><svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M2 1v8l7-4z"/></svg><span class="st">Play chapter</span></span>
+        <span class="bar"><i></i></span>
+      </button>
+      <button type="button" data-ch="Pipeline" data-s="93" data-d="26">
+        <span class="meta"><span><span class="n">06</span> · 1:33</span><span>26s</span></span>
+        <span class="t">Pipeline</span>
+        <span class="d">80% self-originated, and the AI workflows behind it.</span>
+        <span class="go"><svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M2 1v8l7-4z"/></svg><span class="st">Play chapter</span></span>
+        <span class="bar"><i></i></span>
+      </button>
+      <button type="button" data-ch="Careem" data-s="119" data-d="56">
+        <span class="meta"><span><span class="n">07</span> · 1:59</span><span class="star">Start here</span></span>
+        <span class="t">The Careem deal</span>
+        <span class="d">Cold outreach to $6M TCV, told end to end.</span>
+        <span class="go"><svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M2 1v8l7-4z"/></svg><span class="st">Play chapter</span></span>
+        <span class="bar"><i></i></span>
+      </button>
+      <button type="button" data-ch="Learning" data-s="175" data-d="17.8">
+        <span class="meta"><span><span class="n">08</span> · 2:55</span><span>18s</span></span>
+        <span class="t">A lesson learnt</span>
+        <span class="d">A $1.7M loss, and what I changed after it.</span>
+        <span class="go"><svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M2 1v8l7-4z"/></svg><span class="st">Play chapter</span></span>
+        <span class="bar"><i></i></span>
+      </button>
+      <button type="button" data-ch="Territory" data-s="192.8" data-d="30.7">
+        <span class="meta"><span><span class="n">09</span> · 3:12</span><span class="star">Start here</span></span>
+        <span class="t">My plan for Anthropic</span>
+        <span class="d">Lead use cases, account tiers, the first 90 days.</span>
+        <span class="go"><svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M2 1v8l7-4z"/></svg><span class="st">Play chapter</span></span>
+        <span class="bar"><i></i></span>
+      </button>
+      <button type="button" data-ch="Summary" data-s="223.5" data-d="10">
+        <span class="meta"><span><span class="n">10</span> · 3:43</span><span>10s</span></span>
+        <span class="t">What I bring to Anthropic</span>
+        <span class="d">Three strengths, in one breath.</span>
+        <span class="go"><svg viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M2 1v8l7-4z"/></svg><span class="st">Play chapter</span></span>
+        <span class="bar"><i></i></span>
+      </button>
+      </div>
     </div>
   </div>
 </div>
 
+<div class="wrap">
+  <div class="cv" id="cv">
+    <img src="cv-preview.jpg" alt="First page of Aaron Young's CV" width="150" height="211">
+    <div class="body">
+      <p class="label">Curriculum vitae · October 2026</p>
+      <h2 class="serif">My CV, on one page.</h2>
+      <p>Ten years of enterprise SaaS sales across the UK and the Middle East, with attainment and key deals for every role.</p>
+      <div class="actions">
+        <a class="btn primary" href="Aaron_Young_CV.pdf" download="Aaron_Young_CV.pdf"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8m0 0L5 7m3 3l3-3M3 13h10"/></svg>Download PDF</a>
+        <a class="btn" href="Aaron_Young_CV.docx" download="Aaron_Young_CV.docx">Download Word</a>
+        <a class="btn" href="Aaron_Young_CV.pdf" target="_blank" rel="noopener">View</a>
+        <button class="btn" type="button" id="shareCv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 10V2m0 0L5 5m3-3l3 3M3 9v4h10V9"/></svg>Share</button>
+      </div>
+      <p class="toast" id="toast" role="status"></p>
+    </div>
+  </div>
+</div>
 <div class="wrap">
   <div class="mini" id="contact">
     <p class="lede">Thanks for watching. I’d welcome a conversation with anyone on the GTM team.</p>
@@ -428,10 +551,13 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); display: f
   }
 
   var chapters = document.getElementById('chapters');
+  var strip = document.getElementById('strip');
+  var stripBtns = strip.querySelectorAll('button[data-ch]');
+  var cardBtns = chapters.querySelectorAll('button[data-ch]');
 
   poster.addEventListener('click', function () { load().then(track); });
 
-  chapters.addEventListener('click', function (e) {
+  function jump(e) {
     var b = e.target.closest('button[data-ch]');
     if (!b) return;
     var name = b.getAttribute('data-ch');
@@ -439,28 +565,53 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); display: f
     load().then(function () {
       var w = frame.contentWindow;
       if (w && w.__filmJump) w.__filmJump(name);
-      mark(name);
       track();
     });
-  });
+  }
+  chapters.addEventListener('click', jump);
+  strip.addEventListener('click', jump);
 
-  // Keep the list in step with what is playing, including jumps made on the film's own rail.
-  function mark(name) {
-    chapters.querySelectorAll('button[data-ch]').forEach(function (b) {
-      var on = b.getAttribute('data-ch') === name;
+  // Keep the timeline and cards in step with what is playing.
+  function paint(t) {
+    function upd(b, isCard) {
+      var s0 = parseFloat(b.getAttribute('data-s')), d = parseFloat(b.getAttribute('data-d'));
+      var f = Math.max(0, Math.min(1, (t - s0) / d)), on = t >= s0 && t < s0 + d;
       b.classList.toggle('on', on);
-      if (on) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
-    });
+      b.classList.toggle('done', !on && t >= s0 + d);
+      var i = b.querySelector(isCard ? '.bar i' : 'i');
+      if (i) i.style.width = (on ? f * 100 : (isCard ? 0 : (t >= s0 + d ? 100 : 0))) + '%';
+      if (isCard) {
+        var st = b.querySelector('.st');
+        if (st) st.textContent = on ? 'Now playing' : 'Play chapter';
+        if (on) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+      }
+    }
+    stripBtns.forEach(function (b) { upd(b, false); });
+    cardBtns.forEach(function (b) { upd(b, true); });
   }
   var tracking = false;
   function track() {
     if (tracking) return; tracking = true;
     setInterval(function () {
       var w = frame && frame.contentWindow;
-      if (w && w.__filmChapter) mark(w.__filmChapter());
-    }, 250);
+      if (w && w.__filmTime) paint(w.__filmTime());
+    }, 200);
   }
 
+  // Share the CV: the native share sheet where there is one, otherwise copy the link.
+  var toast = document.getElementById('toast');
+  function say(msg) { toast.textContent = msg; clearTimeout(say.t); say.t = setTimeout(function () { toast.textContent = ''; }, 3000); }
+  document.getElementById('shareCv').addEventListener('click', function () {
+    var url = new URL('Aaron_Young_CV.pdf', location.href).href;
+    var data = { title: 'Aaron Young, CV', text: 'Aaron Young, Enterprise Account Executive: CV and four-minute film for Anthropic.', url: url };
+    if (navigator.share) {
+      navigator.share(data).catch(function () {});
+      return;
+    }
+    try {
+      navigator.clipboard.writeText(url).then(function () { say('Link to the CV copied.'); }, function () { say(url); });
+    } catch (e) { say(url); }
+  });
 
   document.querySelectorAll('[data-copy]').forEach(function (btn) {
     btn.addEventListener('click', function () {
