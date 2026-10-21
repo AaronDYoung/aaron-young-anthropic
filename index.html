@@ -142,7 +142,6 @@ h3 { font-family: var(--sans); font-size: 18px; font-weight: 600; letter-spacing
 .btn.primary { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .btn.primary:hover { color: var(--paper); opacity: .9; }
 .btn svg { width: 14px; height: 14px; }
-.toast { font-size: 13.5px; color: var(--clay); min-height: 1em; }
 .top .cvlink { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; color: var(--muted); }
 .top .cvlink:hover { color: var(--ink); }
 .top .links { display: flex; gap: 20px; }
@@ -485,9 +484,8 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); display: f
         <a class="btn primary" href="Aaron_Young_CV.pdf" download="Aaron_Young_CV.pdf"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8m0 0L5 7m3 3l3-3M3 13h10"/></svg>Download PDF</a>
         <a class="btn" href="Aaron_Young_CV.docx" download="Aaron_Young_CV.docx">Download Word</a>
         <a class="btn" href="Aaron_Young_CV.pdf" target="_blank" rel="noopener">View</a>
-        <button class="btn" type="button" id="shareCv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 10V2m0 0L5 5m3-3l3 3M3 9v4h10V9"/></svg>Share</button>
+        <button class="btn" type="button" id="shareCv" hidden><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 10V2m0 0L5 5m3-3l3 3M3 9v4h10V9"/></svg>Share</button>
       </div>
-      <p class="toast" id="toast" role="status"></p>
     </div>
   </div>
 </div>
@@ -598,20 +596,27 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); display: f
     }, 200);
   }
 
-  // Share the CV: the native share sheet where there is one, otherwise copy the link.
-  var toast = document.getElementById('toast');
-  function say(msg) { toast.textContent = msg; clearTimeout(say.t); say.t = setTimeout(function () { toast.textContent = ''; }, 3000); }
-  document.getElementById('shareCv').addEventListener('click', function () {
-    var url = new URL('Aaron_Young_CV.pdf', location.href).href;
-    var data = { title: 'Aaron Young, CV', text: 'Aaron Young, Enterprise Account Executive: CV and four-minute film for Anthropic.', url: url };
-    if (navigator.share) {
-      navigator.share(data).catch(function () {});
-      return;
-    }
-    try {
-      navigator.clipboard.writeText(url).then(function () { say('Link to the CV copied.'); }, function () { say(url); });
-    } catch (e) { say(url); }
-  });
+  // Share the CV file itself through the viewer's share sheet (Mail, Messages, Slack...).
+  // Browsers that cannot share files never see the button.
+  var shareBtn = document.getElementById('shareCv');
+  var cvFile = null;
+  var canFiles = false;
+  try {
+    canFiles = !!(navigator.canShare && navigator.canShare({ files: [new File(['x'], 'test.pdf', { type: 'application/pdf' })] }));
+  } catch (e) {}
+  if (!canFiles) {
+    shareBtn.remove();
+  } else {
+    shareBtn.hidden = false;
+    // Fetch ahead of time: the share sheet must open straight from the click.
+    fetch('Aaron_Young_CV.pdf').then(function (r) { return r.blob(); }).then(function (b) {
+      cvFile = new File([b], 'Aaron_Young_CV.pdf', { type: 'application/pdf' });
+    }).catch(function () { shareBtn.remove(); });
+    shareBtn.addEventListener('click', function () {
+      if (!cvFile) return;
+      navigator.share({ files: [cvFile], title: 'Aaron Young, CV' }).catch(function () {});
+    });
+  }
 
   document.querySelectorAll('[data-copy]').forEach(function (btn) {
     btn.addEventListener('click', function () {
