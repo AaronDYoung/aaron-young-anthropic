@@ -517,10 +517,27 @@ footer { padding-block: 28px 40px; border-top: 1px solid var(--line); display: f
     return doc && doc.querySelector('[data-om-exportable-video-with-duration-secs]');
   }
 
+  // iPhone only allows sound that starts from a tap, so the music player is created and
+  // unlocked here, inside the tap, then handed to the film.
+  function unlockAudio() {
+    if (window.__filmAudio) return;
+    var a = new Audio('assets/1b47a24838d8.m4a');
+    a.preload = 'auto';
+    a.setAttribute('playsinline', '');
+    a.muted = true;
+    window.__filmAudio = a;
+    try {
+      var p = a.play();
+      var done = function () { if (!a.__claimed) { a.pause(); a.currentTime = 0; } a.muted = false; };
+      if (p && p.then) p.then(done, function () { a.muted = false; }); else done();
+    } catch (e) { a.muted = false; }
+  }
+
   function load() {
+    unlockAudio();
     if (ready) return ready;
     frame = document.createElement('iframe');
-    frame.src = 'film.html?v=dd6ec43924';
+    frame.src = 'film.html?v=fa4bd049c0';
     frame.title = 'Aaron Young: my case for Anthropic (film)';
     frame.allow = 'autoplay; fullscreen';
     frame.setAttribute('allowfullscreen', '');
