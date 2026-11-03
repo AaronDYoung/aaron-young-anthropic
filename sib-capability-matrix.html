@@ -1,0 +1,195 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>SIB Capability Matrix</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: single reading column, scorecard up top, grouped matrix, recommendation close */
+:root{
+  --bg:#f6f7fb; --surface:#ffffff; --fg:#141a2e; --muted:#5b6380; --line:#e2e5f0;
+  --dt:#5b2fd6; --dt-soft:#ede8fd; --sib:#0f7a6b; --sib-soft:#e3f3f0;
+  --yes:#12855a; --yes-bg:#e2f4ec; --no:#c2364a; --no-bg:#fbe7ea; --part:#b87100; --part-bg:#fcf1dc;
+  --f-display:"Sora",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1020; --surface:#161a2e; --fg:#e8eaf5; --muted:#9aa1bd; --line:#262b45;
+  --dt:#a48bff; --dt-soft:#251d4a; --sib:#4cc3ad; --sib-soft:#12302c;
+  --yes:#4fd19a; --yes-bg:#12301f; --no:#ff7f90; --no-bg:#3a1820; --part:#f2b54c; --part-bg:#352812; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1020; --surface:#161a2e; --fg:#e8eaf5; --muted:#9aa1bd; --line:#262b45;
+  --dt:#a48bff; --dt-soft:#251d4a; --sib:#4cc3ad; --sib-soft:#12302c;
+  --yes:#4fd19a; --yes-bg:#12301f; --no:#ff7f90; --no-bg:#3a1820; --part:#f2b54c; --part-bg:#352812; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:960px;margin:0 auto;padding-block:40px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:32px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--sib)}
+header{display:grid;gap:12px}
+h1{font-size:clamp(26px,5vw,38px);line-height:1.15;font-weight:700}
+h1 .vs{color:var(--muted);font-weight:500}
+.lede{color:var(--muted);max-width:65ch;margin:0}
+.score{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:12px}
+.card.win{border-color:var(--dt);box-shadow:0 0 0 1px var(--dt)}
+.card-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.vendor{font-family:var(--f-display);font-weight:600;font-size:18px}
+.badge{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--dt);color:var(--surface);padding:4px 10px;border-radius:99px}
+.big{font-family:var(--f-display);font-size:40px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.big small{font-size:16px;color:var(--muted);font-weight:500}
+.bar{height:10px;border-radius:99px;background:var(--line);position:relative;overflow:visible}
+.bar span{position:absolute;inset:0 auto 0 0;border-radius:99px}
+.bar i{position:absolute;top:-5px;bottom:-5px;left:80%;width:2px;background:var(--fg);opacity:.55}
+.bar-label{font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
+.mini{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+table{width:100%;border-collapse:collapse;min-width:560px}
+th,td{padding:14px 16px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+thead th{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+thead th.c{text-align:center;width:150px}
+thead th.dt{color:var(--dt)}
+tr.group td{background:var(--sib-soft);font-family:var(--f-display);font-weight:600;font-size:14px;color:var(--sib);padding-block:10px}
+td.crit b{display:block;font-weight:600}
+td.crit small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+td.c{text-align:center}
+td.c.dtc{background:color-mix(in srgb,var(--dt-soft) 55%,transparent)}
+.mark{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%}
+.mark svg{width:16px;height:16px}
+.m-yes{background:var(--yes-bg);color:var(--yes)}
+.m-no{background:var(--no-bg);color:var(--no)}
+.m-part{background:var(--part-bg);color:var(--part)}
+.note{display:block;font-size:12px;color:var(--muted);margin-top:6px;line-height:1.35}
+tbody tr:last-child td{border-bottom:0}
+.rec{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.rec .card h3{font-size:17px}
+.rec ul{margin:0;padding-left:18px;display:grid;gap:8px}
+.rec .card.lead{background:var(--dt);color:#fff;border-color:var(--dt)}
+:root[data-theme="dark"] .rec .card.lead, .rec .card.lead{color:var(--surface)}
+.rec .card.lead .eyebrow{color:inherit;opacity:.8}
+.foot{font-size:12px;color:var(--muted)}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-yes" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-no" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-part" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 2.5a5.5 5.5 0 0 1 0 11z" fill="currentColor"/></symbol>
+</svg>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Sharjah Islamic Bank · Observability evaluation</div>
+    <h1>Dynatrace <span class="vs">vs</span> Dataroid against SIB success criteria</h1>
+    <p class="lede">SIB's evaluation tests one question: can the bank explain why a customer dropped off or a trade was not executed, quantify the impact, and act before it becomes lost revenue. The criteria below are those agreed for the POC, with technical sign-off at 80% achieved within three weeks.</p>
+  </header>
+
+  <section class="score" aria-label="Coverage summary">
+    <div class="card win">
+      <div class="card-top"><span class="vendor">Dynatrace</span><span class="badge">Recommended</span></div>
+      <div class="big" id="dt-big">0<small> / 0 fully met</small></div>
+      <div class="bar"><span id="dt-bar" style="background:var(--dt)"></span><i title="80% sign-off threshold"></i></div>
+      <div class="bar-label"><span id="dt-pct"></span><span>80% sign-off line</span></div>
+      <div class="mini" id="dt-mini"></div>
+    </div>
+    <div class="card">
+      <div class="card-top"><span class="vendor">Dataroid</span></div>
+      <div class="big" id="dr-big">0<small> / 0 fully met</small></div>
+      <div class="bar"><span id="dr-bar" style="background:var(--muted)"></span><i title="80% sign-off threshold"></i></div>
+      <div class="bar-label"><span id="dr-pct"></span><span>80% sign-off line</span></div>
+      <div class="mini" id="dr-mini"></div>
+    </div>
+  </section>
+
+  <div class="legend" aria-label="Legend">
+    <span><span class="mark m-yes"><svg><use href="#i-yes"/></svg></span>Fully met</span>
+    <span><span class="mark m-part"><svg><use href="#i-part"/></svg></span>Partial or app side only</span>
+    <span><span class="mark m-no"><svg><use href="#i-no"/></svg></span>Not supported</span>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>SIB success criterion</th><th class="c dt">Dynatrace</th><th class="c">Dataroid</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <section class="rec">
+    <div class="card lead">
+      <div class="eyebrow">Recommendation</div>
+      <h3>Dynatrace is the only option that clears SIB's 80% bar</h3>
+      <ul>
+        <li>One platform from the customer tap to the ADX and DFM APIs, core banking and infrastructure</li>
+        <li>Turns rejected and unexecuted trades into a quantified revenue figure the business can act on</li>
+        <li>Davis AI finds root cause automatically and warns ahead of market stress</li>
+        <li>YourCompass brings the region's largest certified Dynatrace team to run the POC</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Where Dataroid fits</div>
+      <h3>A marketing and product analytics layer</h3>
+      <ul>
+        <li>Strong on funnels, user behaviour and app crash tracking</li>
+        <li>Adds campaign engagement and a customer data platform, which sit outside SIB's criteria</li>
+        <li>Cannot see past the device, so it shows that a trade failed but not why</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Next step</div>
+      <h3>Prove it in the POC</h3>
+      <ul>
+        <li>Instrument the Android and iOS Cordova app plus UAT servers in week one</li>
+        <li>Build the order lifecycle and rejection reason dashboards in week two</li>
+        <li>Run a market open stress scenario and score against these criteria in week three</li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="foot">Prepared by Aaron Young, Dynatrace, with YourCompass. Dataroid assessment based on its published product capabilities and should be validated during evaluation.</p>
+</div>
+
+<script>
+const Y='yes',N='no',P='part';
+const data=[
+ {g:'End to end observability',rows:[
+  ['Trace journeys front to back','Mobile and web through APIs, middleware, core systems, databases and infrastructure',Y,N,'','Device side only'],
+  ['Isolate root cause of customer facing issues','Automatic, without war rooms',Y,N,'Davis AI causal analysis','No backend visibility']]},
+ {g:'Digital experience and customer analytics',rows:[
+  ['Active users, logins and sessions','Successful and failed logins, device, location, session behaviour',Y,Y,'',''],
+  ['Onboarding conversion and drop off','Funnel steps and abandonment points',Y,Y,'',''],
+  ['Customer frustration','Rage taps, repeated errors, session replay',Y,P,'Session replay included','Behavioural signals, limited replay'],
+  ['Time to complete successful journeys','End to end journey duration',Y,Y,'','']]},
+ {g:'Reliability and proactive detection',rows:[
+  ['App crashes and unhandled errors','Android and iOS',Y,Y,'',''],
+  ['Failed APIs, payment and fund transfer failures','With the failing backend service identified',Y,P,'','Sees the error on the device, not the cause'],
+  ['Detect issues before customers report them','Automatic baselining and anomaly alerts',Y,P,'','Alerts on app metrics only']]},
+ {g:'Trading business outcomes',rows:[
+  ['Order lifecycle tracking','Submitted, executed, partially executed, rejected, cancelled',Y,P,'Business events from backend','Only what the app reports'],
+  ['Trade volume, value and lost trades','Impacted customers and revenue or margin loss',Y,P,'','No link to execution systems'],
+  ['Rejection reason classification','Buying power, invalid price, market limits, duplicate orders',Y,P,'Parsed from API responses','Requires custom app events']]},
+ {g:'Market data and stress observability',rows:[
+  ['ADX and DFM API load time and latency','Real time measurement',Y,N,'Tracing plus synthetic checks',''],
+  ['Stale or expired price detection','Between display and execution',Y,N,'Correlates front end and backend timing',''],
+  ['Correlate performance with market events','Open, close, IPOs, volatility',Y,P,'','App metrics only']]},
+ {g:'Dashboards and predictive value',rows:[
+  ['Dashboards by audience','Executive KPIs with drill down to engineering detail',Y,P,'','Business views, no technical drill down'],
+  ['Near real time alerting','Business and technical thresholds',Y,P,'','App side events only'],
+  ['Early warning ahead of market stress','Forecasting rather than firefighting',Y,P,'Davis predictive AI','AI focused on customer behaviour']]},
+ {g:'POC technical proof points',rows:[
+  ['Instrument Android and iOS','Native mobile agents',Y,Y,'',''],
+  ['Cordova hybrid app support','SIB’s mobile framework',P,P,'Early Cordova versions are outside official support but work, with simple configuration','To be confirmed with vendor'],
+  ['UAT server telemetry and logs','Collect and validate data flow',Y,N,'OneAgent and log ingest','']]}
+];
+const icon=v=>`<span class="mark m-${v}" aria-label="${v==='yes'?'Fully met':v==='no'?'Not supported':'Partial'}"><svg><use href="#i-${v}"/></svg></span>`;
+const tb=document.getElementById('rows');let html='';const t={dt:{yes:0,part:0,no:0},dr:{yes:0,part:0,no:0}};let n=0;
+data.forEach(s=>{html+=`<tr class="group"><td colspan="3">${s.g}</td></tr>`;
+ s.rows.forEach(r=>{n++;t.dt[r[2]]++;t.dr[r[3]]++;
+  html+=`<tr><td class="crit"><b>${r[0]}</b><small>${r[1]}</small></td><td class="c dtc">${icon(r[2])}${r[4]?`<span class="note">${r[4]}</span>`:''}</td><td class="c">${icon(r[3])}${r[5]?`<span class="note">${r[5]}</span>`:''}</td></tr>`;});});
+tb.innerHTML=html;
+[['dt','dt'],['dr','dr']].forEach(([k])=>{const p=Math.round(t[k].yes/n*100);
+ document.getElementById(k+'-big').innerHTML=`${t[k].yes}<small> / ${n} fully met</small>`;
+ document.getElementById(k+'-bar').style.width=p+'%';
+ document.getElementById(k+'-pct').textContent=p+'% fully met';
+ document.getElementById(k+'-mini').innerHTML=`<span>${t[k].part} partial</span><span>${t[k].no} not supported</span>`;});
+</script>
+
+</body></html>
